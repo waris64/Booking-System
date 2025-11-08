@@ -7,9 +7,9 @@ import {
 } from "../services/bookingServices.js";
 
 // create bookings
-export const handleCreateBooking = async () => {
+export const handleCreateBooking = async (req, res) => {
   try {
-    const booking = await createBooking(req.boy);
+    const booking = await createBooking(req.body);
     res.status(200).json({ booking });
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -17,23 +17,26 @@ export const handleCreateBooking = async () => {
 };
 
 // request bookings
-export const handleGetAllBookings = async () => {
+export const handleGetAllBookings = async (req, res) => {
   try {
     const bookings = await getAllBookings();
     res.status(200).json({ bookings });
-  } catch {
+  } catch (error) {
     res.status(500).json({ error: error.message });
   } 
 };
 
 // Get booking by id
-export const handleBookingById = async (req,res) =>{
-    try{
-        const {id} = req.params;
+export const handleBookingById = async (req, res) => {
+    try {
+        const { id } = req.params;
         const booking = await getBookingById(id);
-        res.status(200).json(booking)
-    }catch{
-       res.status(500).json({error:error.message})
+        if (!booking) {
+            return res.status(404).json({ error: "Booking not found" });
+        }
+        res.status(200).json(booking);
+    } catch (error) {
+       res.status(500).json({ error: error.message });
     }
 };
 
@@ -51,12 +54,12 @@ export const handleUpdateBookingStatus = async (req,res) =>{
 };
 
 // cancel booking 
-export const handleCancelBooking = async () =>{
+export const handleCancelBooking = async (req, res) => {
     try {
-        const {id}  = req.params;
-        const cancelBooking = await cancelBooking(id);
-        res.status(200).json({cancel})
+        const { id } = req.params;
+        const cancelled = await cancelBooking(id);
+        res.status(200).json({ message: "Booking cancelled", booking: cancelled });
     } catch (error) {
-        res.status(500).json({error:error.message})
+        res.status(500).json({ error: error.message });
     }
 }

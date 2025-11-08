@@ -4,11 +4,15 @@ export const createBooking = async (bookingData) => {
   const { userId, tripId, numberOfPeople } = bookingData;
 
   // Get the trip details
-  const trip = prisma.trip.findUnique({
+  const trip = await prisma.trip.findUnique({
     where: { id: tripId },
   });
 
-  // check the enough seats are avaiable or not?
+  if (!trip) {
+    throw new Error("Trip not found");
+  }
+
+  // check the enough seats are available or not?
   if (trip.availableSeats < numberOfPeople) {
     throw new Error("Not enough seats are available");
   }
@@ -17,7 +21,7 @@ export const createBooking = async (bookingData) => {
   const totalPrice = trip.price * numberOfPeople;
 
   //Creating the booking entry
-  const booking = prisma.booking.create({
+  const booking = await prisma.booking.create({
     data: {
       userId,
       tripId,
@@ -33,13 +37,13 @@ export const createBooking = async (bookingData) => {
       availableSeats: trip.availableSeats - numberOfPeople,
     },
   });
+  
   return booking;
 };
 
 // Get all the bookings (admin view)
-
 export const getAllBookings = () => {
-  prisma.booking.findMany({
+  return prisma.booking.findMany({
     include: { Trip: true },
   });
 };
@@ -64,21 +68,25 @@ export const updateBookingStatus = (id, status) => {
 
 // Cancel the booking
 export const cancelBooking = async (id) => {
-  return prisma.booking.findUnique({
-    id: parseInt(id),
+  const booking = await prisma.booking.findUnique({
+    where: { id: parseInt(id) },
+    include: { Trip: true },
   });
-  if (!booking) throw new Error("No booking exist");
+  
+  if (!booking) throw new Error("No booking exists");
 
-  //Restoring the seats
+  // Restore the seats to the trip
+  await prisma.trip.update({
+    where: { id: booking.tripId },
+    data: {
+      availableSeats: {
+        increment: booking.numberOfPeople,
+      },
+    },
+  });
 
-  data: {
-    availableSeats: {
-      increment: booking.numberOfPeople;
-    }
-  }
+  // Delete the booking
+  return await prisma.booking.delete({
+    where: { id: parseInt(id) },
+  });
 };
-
-// Delete the booking
-return await prisma.booking.delete({
-  where: { id: parseInt(id) },
-});
