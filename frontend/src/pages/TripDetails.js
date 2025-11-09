@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { MapPin, Calendar, Clock, Users, DollarSign, ArrowLeft, AlertTriangle } from 'lucide-react';
 import { tripAPI, bookingAPI } from '../services/api';
@@ -10,14 +10,10 @@ const TripDetails = () => {
   const [trip, setTrip] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bookingData, setBookingData] = useState({
-    userId: 1,
+    userName: '',
     numberOfPeople: 1
   });
   const [isBooking, setIsBooking] = useState(false);
-
-  useEffect(() => {
-    fetchTripDetails();
-  }, [id]);
 
   const fetchTripDetails = async () => {
     try {
@@ -31,6 +27,11 @@ const TripDetails = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchTripDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const handleBooking = async (e) => {
     e.preventDefault();
@@ -183,19 +184,19 @@ const TripDetails = () => {
               
               <form onSubmit={handleBooking} className="space-y-4">
                 <div>
-                  <label htmlFor="userId" className="block text-sm font-medium text-gray-700 mb-2">
-                    User ID
+                  <label htmlFor="userName" className="block text-sm font-medium text-gray-700 mb-2">
+                    Your Name
                   </label>
                   <input
-                    type="number"
-                    id="userId"
-                    value={bookingData.userId}
+                    type="text"
+                    id="userName"
+                    value={bookingData.userName}
                     onChange={(e) => setBookingData({
                       ...bookingData,
-                      userId: parseInt(e.target.value)
+                      userName: e.target.value
                     })}
                     className="input"
-                    min="1"
+                    placeholder="Enter your full name"
                     required
                   />
                 </div>

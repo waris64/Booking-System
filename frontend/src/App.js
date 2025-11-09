@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { Toaster } from 'react-hot-toast';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import Navbar from './components/Navbar';
@@ -10,10 +10,9 @@ import Admin from './pages/Admin';
 import TripDetails from './pages/TripDetails';
 import Auth from './pages/Auth';
 import './App.css';
-
 function AppContent() {
   const { user, loading } = useAuth();
-
+  
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center gradient-bg">
@@ -34,11 +33,12 @@ function AppContent() {
       <Navbar />
       <main className="pt-16">
         <Routes>
+          <Route path='/admin'
+          element = {user?.email === "admin@gmail.com" ? <Admin/> : <Navigate to="/" replace/>} />
           <Route path="/" element={<Home />} />
           <Route path="/trips" element={<Trips />} />
           <Route path="/trips/:id" element={<TripDetails />} />
           <Route path="/bookings" element={<Bookings />} />
-          <Route path="/admin" element={<Admin />} />
         </Routes>
       </main>
     </div>

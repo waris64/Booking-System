@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Calendar, MapPin, Users, DollarSign, Clock, CheckCircle, XCircle, AlertCircle } from 'lucide-react';
 import { bookingAPI } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 import toast from 'react-hot-toast';
 
 const Bookings = () => {
+  const { user } = useAuth();
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -106,6 +108,11 @@ const Bookings = () => {
                           <MapPin size={16} className="mr-2" />
                           <span>{booking.Trip?.location}</span>
                         </div>
+                        {booking.userName && (
+                          <div className="text-sm text-gray-500">
+                            Booked by: <span className="font-medium text-gray-700">{booking.userName}</span>
+                          </div>
+                        )}
                       </div>
                       
                       {/* Status Badge */}
@@ -162,7 +169,7 @@ const Bookings = () => {
 
                   {/* Actions */}
                   <div className="flex flex-col sm:flex-row gap-2 mt-4 lg:mt-0 lg:ml-6">
-                    {booking.status === 'pending' && (
+                    {booking.status === 'pending' && user?.email === 'admin@gmail.com' && (
                       <button
                         onClick={() => handleStatusUpdate(booking.id, 'confirmed')}
                         className="btn btn-primary btn-small"
