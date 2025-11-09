@@ -1,7 +1,7 @@
 import { prisma } from "../lib/prismaClient.js";
 
 export const createBooking = async (bookingData) => {
-  const { userId, tripId, numberOfPeople } = bookingData;
+  const { userId, userName, tripId, numberOfPeople } = bookingData;
 
   // Get the trip details
   const trip = await prisma.trip.findUnique({
@@ -23,7 +23,8 @@ export const createBooking = async (bookingData) => {
   //Creating the booking entry
   const booking = await prisma.booking.create({
     data: {
-      userId,
+      userId: userId || 1,
+      userName,
       tripId,
       numberOfPeople,
       totalPrice,
