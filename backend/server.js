@@ -18,7 +18,15 @@ try {
 }
 
 const app = express();
-app.use(cors());
+
+// CORS configuration - Allow all origins for development
+app.use(cors({
+  origin: true,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
 // Test route
