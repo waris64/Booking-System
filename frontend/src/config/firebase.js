@@ -3,13 +3,13 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDbYApL1UTDCuRvReAUmV_rfqDVacS20VM",
-  authDomain: "travelbook-c5c57.firebaseapp.com",
-  projectId: "project-667959703011",
-  storageBucket: "travelbook-c5c57.firebasestorage.app",
-  messagingSenderId: "667959703011",
-  appId: "1:667959703011:web:c2233289f3ef23a9641cd6",
-  measurementId: "G-E4WSG44FMJ"
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "AIzaSyDbYApL1UTDCuRvReAUmV_rfqDVacS20VM",
+  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "travelbook-c5c57.firebaseapp.com",
+  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "project-667959703011",
+  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "travelbook-c5c57.firebasestorage.app",
+  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID || "667959703011",
+  appId: process.env.REACT_APP_FIREBASE_APP_ID || "1:667959703011:web:c2233289f3ef23a9641cd6",
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID || "G-E4WSG44FMJ"
 };
 
 // Initialize Firebase

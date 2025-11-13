@@ -1,9 +1,10 @@
 import axios from 'axios';
 
-// Use port 4000 to match backend
-const API_BASE_URL = 'http://localhost:4000/api';
+// Dynamic API URL based on environment
+const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:4000/api';
 
-console.log('🔗 API Base URL:', API_BASE_URL)
+console.log('🔗 API Base URL:', API_BASE_URL);
+console.log('🌍 Environment:', process.env.NODE_ENV);
 
 const api = axios.create({
   baseURL: API_BASE_URL,
