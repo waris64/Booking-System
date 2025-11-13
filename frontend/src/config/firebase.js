@@ -3,7 +3,7 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY || "AIzaSyDbYApL1UTDCuRvReAUmV_rfqDVacS20VM",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY ,
   authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN || "travelbook-c5c57.firebaseapp.com",
   projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID || "project-667959703011",
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET || "travelbook-c5c57.firebasestorage.app",
